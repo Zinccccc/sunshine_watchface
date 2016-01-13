@@ -104,10 +104,10 @@ public class MyWatchFace extends CanvasWatchFaceService {
             mYOffset = resources.getDimension(R.dimen.digital_y_offset);
 
             mBackgroundPaint = new Paint();
-            mBackgroundPaint.setColor(resources.getColor(R.color.digital_background));
+            mBackgroundPaint.setColor(resources.getColor(R.color.dialog_background));
 
             mTextPaint = new Paint();
-            mTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
+            mTextPaint = createTextPaint(resources.getColor(R.color.watchface_text));
 
             mTime = new Time();
         }
@@ -215,6 +215,7 @@ public class MyWatchFace extends CanvasWatchFaceService {
             String text = mAmbient
                     ? String.format("%d:%02d", mTime.hour, mTime.minute)
                     : String.format("%d:%02d:%02d", mTime.hour, mTime.minute, mTime.second);
+            text += "\nzinc";
             canvas.drawText(text, mXOffset, mYOffset, mTextPaint);
         }
 
