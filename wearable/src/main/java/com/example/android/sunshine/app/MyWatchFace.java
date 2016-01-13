@@ -57,6 +57,8 @@ public class MyWatchFace extends CanvasWatchFaceService {
      */
     private static final int MSG_UPDATE_TIME = 0;
 
+    private static final String[] week = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
+
     @Override
     public Engine onCreateEngine() {
         return new Engine();
@@ -76,15 +78,18 @@ public class MyWatchFace extends CanvasWatchFaceService {
         boolean mRegisteredTimeZoneReceiver = false;
 
         Paint mBackgroundPaint;
-        Paint mTextPaint;
+        Paint mTimeTextPaint;
+        Paint mDateTextPaint;
 
         boolean mAmbient;
 
         Time mTime;
 
-        float mXOffset;
-        float mYOffset;
+        float mTimeXOffset;
+        float mTimeYOffset;
 
+        float mDateXOffset;
+        float mDateYOffset;
         /**
          * Whether the display supports fewer bits for each color in ambient mode. When true, we
          * disable anti-aliasing in ambient mode.
@@ -101,13 +106,21 @@ public class MyWatchFace extends CanvasWatchFaceService {
                     .setShowSystemUiTime(false)
                     .build());
             Resources resources = MyWatchFace.this.getResources();
-            mYOffset = resources.getDimension(R.dimen.digital_y_offset);
+            mTimeYOffset = resources.getDimension(R.dimen.time_y_offset);
+            mDateYOffset = resources.getDimension(R.dimen.date_y_offset);
 
             mBackgroundPaint = new Paint();
-            mBackgroundPaint.setColor(resources.getColor(R.color.dialog_background));
+            mBackgroundPaint.setColor(resources.getColor(R.color.watchface_background));
 
-            mTextPaint = new Paint();
-            mTextPaint = createTextPaint(resources.getColor(R.color.watchface_text));
+            mTimeTextPaint = new Paint();
+            mTimeTextPaint = createTextPaint(resources.getColor(R.color.watchface_text));
+            mTimeTextPaint.setTextSize(resources.getDimension(R.dimen.time_text_size));
+
+            mDateTextPaint = new Paint();
+            mDateTextPaint = createTextPaint(resources.getColor(R.color.watchface_text));
+            mDateTextPaint.setTextSize(resources.getDimension(R.dimen.date_text_size));
+            mDateTextPaint.setAlpha((int) resources.getDimension(R.dimen.date_alpha));
+            // TODO: 여기서 데이터도 받아와야지
 
             mTime = new Time();
         }
@@ -169,12 +182,10 @@ public class MyWatchFace extends CanvasWatchFaceService {
             // Load resources that have alternate values for round watches.
             Resources resources = MyWatchFace.this.getResources();
             boolean isRound = insets.isRound();
-            mXOffset = resources.getDimension(isRound
-                    ? R.dimen.digital_x_offset_round : R.dimen.digital_x_offset);
-            float textSize = resources.getDimension(isRound
-                    ? R.dimen.digital_text_size_round : R.dimen.digital_text_size);
-
-            mTextPaint.setTextSize(textSize);
+            mTimeXOffset = resources.getDimension(isRound
+                    ? R.dimen.time_x_offset_round : R.dimen.time_x_offset);
+            mDateXOffset = resources.getDimension(isRound
+                    ? R.dimen.date_x_offset_round : R.dimen.date_x_offset);
         }
 
         @Override
@@ -195,7 +206,8 @@ public class MyWatchFace extends CanvasWatchFaceService {
             if (mAmbient != inAmbientMode) {
                 mAmbient = inAmbientMode;
                 if (mLowBitAmbient) {
-                    mTextPaint.setAntiAlias(!inAmbientMode);
+                    mTimeTextPaint.setAntiAlias(!inAmbientMode);
+                    mDateTextPaint.setAntiAlias(!inAmbientMode);
                 }
                 invalidate();
             }
@@ -212,11 +224,10 @@ public class MyWatchFace extends CanvasWatchFaceService {
 
             // Draw H:MM in ambient mode or H:MM:SS in interactive mode.
             mTime.setToNow();
-            String text = mAmbient
-                    ? String.format("%d:%02d", mTime.hour, mTime.minute)
-                    : String.format("%d:%02d:%02d", mTime.hour, mTime.minute, mTime.second);
-            text += "\nzinc";
-            canvas.drawText(text, mXOffset, mYOffset, mTextPaint);
+            String time = String.format("%02d:%02d", mTime.hour, mTime.minute);
+            canvas.drawText(time, mTimeXOffset, mTimeYOffset, mTimeTextPaint);
+            String date = String.format("%s,%02d %02d %d", week[mTime.weekDay], mTime.month+1, mTime.monthDay, mTime.year);
+            canvas.drawText(date, mDateXOffset, mDateYOffset, mDateTextPaint);
         }
 
         /**
