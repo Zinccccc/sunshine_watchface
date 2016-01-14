@@ -119,7 +119,7 @@ public class MyWatchFace extends CanvasWatchFaceService {
             mDateTextPaint = new Paint();
             mDateTextPaint = createTextPaint(resources.getColor(R.color.watchface_text));
             mDateTextPaint.setTextSize(resources.getDimension(R.dimen.date_text_size));
-            mDateTextPaint.setAlpha((int) resources.getDimension(R.dimen.date_alpha));
+            mDateTextPaint.setAlpha(150);
             // TODO: 여기서 데이터도 받아와야지
 
             mTime = new Time();

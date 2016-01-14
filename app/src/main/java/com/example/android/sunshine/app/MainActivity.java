@@ -32,6 +32,7 @@ import android.view.View;
 
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.gcm.RegistrationIntentService;
+import com.example.android.sunshine.app.sync.MessageSender;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -45,6 +46,12 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
     private boolean mTwoPane;
     private String mLocation;
+
+
+
+    private static final String MESSAGE = "This is from the mobile";
+    private MessageSender _messageSender;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 startService(intent);
             }
         }
+        _messageSender = new MessageSender(this);
     }
 
     @Override
@@ -125,11 +133,17 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
+//            startActivity(new Intent(this, SettingsActivity.class));
+            sendMessageToPhone();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void sendMessageToPhone() {
+        _messageSender.sendMessage(MESSAGE);
     }
 
     @Override
