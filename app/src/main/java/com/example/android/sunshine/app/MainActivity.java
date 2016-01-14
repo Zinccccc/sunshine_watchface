@@ -47,12 +47,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     private boolean mTwoPane;
     private String mLocation;
 
-
-
-    private static final String MESSAGE = "!?";
-    private WearDataSender _messageSender;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 startService(intent);
             }
         }
-        _messageSender = new WearDataSender(this);
     }
 
     @Override
@@ -134,16 +127,10 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
-//            sendMessageToPhone();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    private void sendMessageToPhone() {
-        _messageSender.sendMessage(MESSAGE);
     }
 
     @Override

@@ -36,6 +36,11 @@ import com.example.android.sunshine.app.R;
 import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.muzei.WeatherMuzeiSource;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
+import com.google.android.gms.wearable.Wearable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,11 +92,11 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     public static final int LOCATION_STATUS_UNKNOWN = 3;
     public static final int LOCATION_STATUS_INVALID = 4;
 
-    WearDataSender _messageSender;
+    WearDataSender mWearDataSender;
 
     public SunshineSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-        _messageSender = new WearDataSender(context);
+        mWearDataSender = new WearDataSender(context);
     }
 
     @Override
@@ -381,10 +386,11 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     private void updateWatchFace(){
-        Log.d("SunshineSyncAdapter", "updateWatchFace Called!");
+        Log.d(LOG_TAG, "updateWatchFace Called!");
 
-        final String MESSAGE = "!!";
-        _messageSender.sendMessage(MESSAGE);
+        final String MESSAGE = mWearDataSender.getDataJson();
+
+        mWearDataSender.sendMessage(MESSAGE);
     }
 
     private void notifyWeather() {
