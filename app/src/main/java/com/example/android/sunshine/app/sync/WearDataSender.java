@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 //reference https://github.com/bourdibay/TestMessagesCommunicationWearPhone
-public class MessageSender {
+public class WearDataSender {
     private static final long CONNECTION_TIME_OUT = 1; // seconds
 
     private GoogleApiClient mGoogleApiClient;
     private String nodeID = null;
 
-    public MessageSender(Context context) {
+    public WearDataSender(Context context) {
         mGoogleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(Wearable.API)
                 .build();

@@ -32,7 +32,7 @@ import android.view.View;
 
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.gcm.RegistrationIntentService;
-import com.example.android.sunshine.app.sync.MessageSender;
+import com.example.android.sunshine.app.sync.WearDataSender;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
 
 
-    private static final String MESSAGE = "!";
-    private MessageSender _messageSender;
+    private static final String MESSAGE = "!?";
+    private WearDataSender _messageSender;
 
 
     @Override
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 startService(intent);
             }
         }
-        _messageSender = new MessageSender(this);
+        _messageSender = new WearDataSender(this);
     }
 
     @Override
@@ -133,8 +133,8 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-//            startActivity(new Intent(this, SettingsActivity.class));
-            sendMessageToPhone();
+            startActivity(new Intent(this, SettingsActivity.class));
+//            sendMessageToPhone();
             return true;
         }
 
