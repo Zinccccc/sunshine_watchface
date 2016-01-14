@@ -20,6 +20,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -225,9 +226,16 @@ public class MyWatchFace extends CanvasWatchFaceService {
             // Draw H:MM in ambient mode or H:MM:SS in interactive mode.
             mTime.setToNow();
             String time = String.format("%02d:%02d", mTime.hour, mTime.minute);
+            time += getPreferences();
             canvas.drawText(time, mTimeXOffset, mTimeYOffset, mTimeTextPaint);
             String date = String.format("%s,%02d %02d %d", week[mTime.weekDay], mTime.month+1, mTime.monthDay, mTime.year);
             canvas.drawText(date, mDateXOffset, mDateYOffset, mDateTextPaint);
+        }
+
+        // 값 불러오기
+        private String getPreferences(){
+            SharedPreferences pref = getSharedPreferences("WEAR_RECEIVED_MESSAGE", MODE_PRIVATE);
+            return pref.getString("MESSAGE", "none");
         }
 
         /**

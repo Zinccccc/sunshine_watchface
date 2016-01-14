@@ -1,19 +1,26 @@
 package com.example.android.sunshine.app;
 
+import android.content.SharedPreferences;
+import android.util.Log;
 import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.WearableListenerService;
 
-/**
- * Created by bourdi_bay on 31/01/2015.
- */
-public class ListenerService extends BaseListenerService {
+
+//reference : https://github.com/bourdibay/TestMessagesCommunicationWearPhone
+public class ListenerService extends WearableListenerService {
+    private String receivedString;
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        showToast(messageEvent.getPath());
+        receivedString = messageEvent.getPath();
+        savePreferences();
+        Log.d("ListenerService", receivedString);
+    }
 
-        // Perform actions like network requests, etc...
-
-        // Send back an answer to the wear.
-        _messageSender.sendMessage("This is a response from the wear");
+    private void savePreferences(){
+        SharedPreferences pref = getSharedPreferences("WEAR_RECEIVED_MESSAGE", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("MESSAGE", receivedString);
+        editor.commit();
     }
 }

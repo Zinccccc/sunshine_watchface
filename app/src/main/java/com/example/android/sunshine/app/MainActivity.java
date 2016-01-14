@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
 
 
-    private static final String MESSAGE = "This is from the mobile";
+    private static final String MESSAGE = "?";
     private MessageSender _messageSender;
 
 
